@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Secured Field Access</masterLabel>
+    <description>This component is used to display given field values masked and provide secured edit</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="strFieldMaskJSON" type="String" default="{}" label="Enter field and masker in regex as json [{&quot;field&quot;: &quot;ssn__c&quot;, &quot;masker&quot;: &quot;apexclass.method&quot;}, {..}]"/>
+            <property name="strTitle" type="String" default="" label="Enter Title for the Card."/>
+        </targetConfig>
+      </targetConfigs>
+</LightningComponentBundle>
