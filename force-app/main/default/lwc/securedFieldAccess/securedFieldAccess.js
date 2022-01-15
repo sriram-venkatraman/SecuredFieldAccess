@@ -59,14 +59,15 @@ export default class SecuredFieldAccess extends LightningElement {
                     this.logTheView(this.strLoggerClass,
                                     this.objectApiName, 
                                     this.fieldData[i].fieldName,  
-                                    this.recordId);
+                                    this.recordId,
+                                    'Accessed from ' + window.location.pathname);
                 }
             }
         }
     }
 
-    logTheView(cm, obj, fld, rid) {
-        viewLogger({ classMethod: cm, objectName: obj, fieldName: fld,  recordId: rid})
+    logTheView(cm, obj, fld, rid, dtl) {
+        viewLogger({ classMethod: cm, objectName: obj, fieldName: fld,  recordId: rid, detail: dtl})
             .then((result) => {
                 if (result != 'Success') {
                     const evt = new ShowToastEvent({title: 'Logger Error',

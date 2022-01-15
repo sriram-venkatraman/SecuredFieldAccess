@@ -100,7 +100,7 @@ public with sharing class SecuredFieldAccess {
     }
 
     @AuraEnabled
-    public static String callViewLogger(String classMethod, String objectName, String fieldName, String recordId) {
+    public static String callViewLogger(String classMethod, String objectName, String fieldName, String recordId, string detail) {
 
         String className = classMethod;
         String methodName;
@@ -114,7 +114,8 @@ public with sharing class SecuredFieldAccess {
         String status = (String) logger.call((methodName != null ? methodName : 'logView'), 
                                              new Map<String, Object> { 'objectName' => objectName, 
                                                                        'fieldName' => fieldName, 
-                                                                       'recordId' => recordId });
+                                                                       'recordId' => recordId,
+                                                                       'detail' => detail });
 
         return status;
     }
