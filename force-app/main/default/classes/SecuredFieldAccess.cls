@@ -39,7 +39,7 @@ public with sharing class SecuredFieldAccess {
                 ofld.label = fieldMap.get(field).getDescribe().getLabel();
                 if (fieldMap.get(field).getDescribe().getType() == Schema.DisplayType.DATE || 
                     fieldMap.get(field).getDescribe().getType() == Schema.DisplayType.DATETIME) {
-                    ofld.value = ((Datetime) record.get(field)).format('dd/MM/yyyy');
+                    ofld.value = ((Datetime) record.get(field)).formatGmt('MM/dd/yyyy');
                 } else {
                     ofld.value = (String) record.get(field);
                 }
@@ -49,7 +49,7 @@ public with sharing class SecuredFieldAccess {
 
                 if (className != null && methodName != null) {
                     Callable masker = (Callable) Type.forName(className).newInstance();
-                    if (fieldMap.get(field).getDescribe().getType() == Schema.DisplayType.DATE || 
+                    if (fieldMap.get(field).getDescribe().getType() == Schema.DisplayType.DATE ||
                         fieldMap.get(field).getDescribe().getType() == Schema.DisplayType.DATETIME) {
                         ofld.maskedValue = (String) masker.call(methodName, new Map<String, Object> { 'dateValue' => (Datetime) record.get(field), 'stringValue' => '**/mm/yyyy' });
                     } else if (fieldMap.get(field).getDescribe().getType() == Schema.DisplayType.STRING) {
@@ -65,11 +65,26 @@ public with sharing class SecuredFieldAccess {
         return JSON.serialize(oflds);
     }
 
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static String updateField(String fieldName, String value, String recordId, String sObjectName) {
         sObject sObj = Schema.getGlobalDescribe().get(sObjectName).newSObject();
+        Schema.SObjectType sot = sObj.getSObjectType();
+        Map<String, Schema.SObjectField> fieldMap = sot.getDescribe().fields.getMap();
+
         sObj.put('Id', recordId);
-        sObj.put(fieldName, value);
+
+        try {
+            if (fieldMap.get(fieldName).getDescribe().getType() == Schema.DisplayType.DATE) {
+                sObj.put(fieldName, Date.parse(value));
+            } else if (fieldMap.get(fieldName).getDescribe().getType() == Schema.DisplayType.DATETIME) {
+                sObj.put(fieldName, Datetime.parse(value));
+            } else {
+                sObj.put(fieldName, value);
+            }
+        } catch (Exception e) {
+            return 'Error! Bad data. ' + e.getMessage();
+        }
+
         try {
             update sObj;
         } catch (Exception e) {

@@ -1,6 +1,11 @@
 public class DataMasker implements Callable {
 
     public static String maskSSN(String convertInput) {
+
+        if (convertInput == null) {
+            return null;
+        }
+
         String convertOutput = '';
         String validate = '(?:\\d{9})';
 
@@ -20,11 +25,15 @@ public class DataMasker implements Callable {
     }
 
     public static String maskDate(Datetime convertInput, String dateFormat) {
+        if (convertInput == null) {
+            return null;
+        }
+
         String convertOutput = '';
         System.debug('Sriram Date: ' + convertInput);
         try {
             if (dateFormat == '**/mm/yyyy' || dateFormat == null) {
-                convertOutput = '**/' + String.valueOf(convertInput.month()).rightPad(2, '0') + '/' + String.valueOf(convertInput.year());
+                convertOutput = convertInput.formatGmt('MM/yyyy');
             } else {
                 return 'Bad Date Format';
             }

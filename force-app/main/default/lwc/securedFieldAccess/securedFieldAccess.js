@@ -73,10 +73,21 @@ export default class SecuredFieldAccess extends LightningElement {
         }
     }
 
+    get showSaveButton() {
+        for (var i = 0; i < this.fieldData.length; i++) {
+            if (this.fieldData[i].fieldName == this.changeField &&
+                this.changeValue != undefined &&
+                this.changeValue != this.fieldData[i].value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     handleSaveClick(event) {
         for (var i = 0; i < this.fieldData.length; i++) {
             if (this.fieldData[i].fieldName == event.target.title) {
-                if (this.changeValue != this.fieldData[i].value) {
+                if (this.changeValue != this.fieldData[i].value && this.changeValue != undefined) {
                     this.saveRecord(this.changeLabel, 
                                     this.changeField, 
                                     this.changeValue, 
@@ -102,6 +113,7 @@ export default class SecuredFieldAccess extends LightningElement {
                 this.changeField = undefined;
                 this.changeLabel = undefined;
                 this.changeValue = undefined;
+                this.error = undefined;
             }
         }
     }

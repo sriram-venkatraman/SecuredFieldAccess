@@ -39,7 +39,9 @@
                                 <lightning-button-icon class="slds-m-left_xx-small" icon-name="utility:edit" variant="bare" alternative-text="Edit" title={field.fieldName} onclick={handleEditClick}></lightning-button-icon>
                             </template>
                             <template if:true={field.editMode}>
-                                <lightning-button-icon class="slds-m-left_xx-small" icon-name="utility:check" variant="bare" alternative-text="Edit" title={field.fieldName} onclick={handleSaveClick}></lightning-button-icon>
+                                <template if:true={showSaveButton}>
+                                    <lightning-button-icon class="slds-m-left_xx-small" icon-name="utility:check" variant="bare" alternative-text="Edit" title={field.fieldName} onclick={handleSaveClick}></lightning-button-icon>
+                                </template>
                                 <lightning-button-icon class="slds-m-left_xx-small" icon-name="utility:close" variant="bare" alternative-text="Edit" title={field.fieldName} onclick={handleCancelClick}></lightning-button-icon>
                             </template>
                         </template>
