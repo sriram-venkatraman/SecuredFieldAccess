@@ -8,15 +8,19 @@ export default class SecuredFieldAccess extends LightningElement {
     @api objectApiName;
     @api recordId;
     @api strFieldMaskJSON;
-    @api strLoggerClass;
+    @api strViewLoggerClass;
+    @api strChangeLoggerClass;
     @api strTitle;
     @api strOutput;
+    @track sectionReveal;
     @track fieldData;
     changeField;
     changeValue;
     changeLabel;
 
     @track error;
+
+    sectionReveal = false;
 
     @wire(getSecuredFields, { fieldList: '$strFieldMaskJSON', recordId: '$recordId', sObjectName: '$objectApiName' })
     wiredFields({ error, data }) {
@@ -54,13 +58,13 @@ export default class SecuredFieldAccess extends LightningElement {
 
                 if (this.fieldData[i].value != undefined && 
                     this.fieldData[i].value != null && 
-                    this.strLoggerClass != null && 
-                    this.strLoggerClass != undefined) {
-                    this.logTheView(this.strLoggerClass,
+                    this.strViewLoggerClass != null && 
+                    this.strViewLoggerClass != undefined) {
+                    this.logTheView(this.strViewLoggerClass,
                                     this.objectApiName, 
                                     this.fieldData[i].fieldName,  
                                     this.recordId,
-                                    'Accessed from ' + window.location.pathname);
+                                    'Revealed from ' + window.location.pathname);
                 }
             }
         }
@@ -86,6 +90,10 @@ export default class SecuredFieldAccess extends LightningElement {
             });        
     }
 
+    handleSectionRevealClick(event) {
+        this.sectionReveal = !(this.sectionReveal);
+    }
+
     handleMaskClick(event) {
         for (var i = 0; i < this.fieldData.length; i++) {
             if (this.fieldData[i].fieldName == event.target.title) {
@@ -101,6 +109,17 @@ export default class SecuredFieldAccess extends LightningElement {
                 this.changeField = this.fieldData[i].fieldName;
                 this.changeLabel = this.fieldData[i].label;
                 this.changeValue = undefined;
+
+                if (this.fieldData[i].value != undefined && 
+                    this.fieldData[i].value != null && 
+                    this.strViewLoggerClass != null && 
+                    this.strViewLoggerClass != undefined) {
+                    this.logTheView(this.strViewLoggerClass,
+                                    this.objectApiName, 
+                                    this.fieldData[i].fieldName,  
+                                    this.recordId,
+                                    'Revealed for editing from ' + window.location.pathname);
+                }
             }
         }
     }
@@ -132,7 +151,8 @@ export default class SecuredFieldAccess extends LightningElement {
                                     this.changeField, 
                                     this.changeValue, 
                                     this.recordId, 
-                                    this.objectApiName);
+                                    this.objectApiName,
+                                    ((this.strChangeLoggerClass != undefined && this.strChangeLoggerClass != null && this.strChangeLoggerClass != '') ? this.strChangeLoggerClass : null));
                 }
             }
         }
@@ -150,14 +170,15 @@ export default class SecuredFieldAccess extends LightningElement {
         }
     }
 
-    saveRecord(lbl, fld, val, rid, obj) {
-        updateField({ fieldName: fld, value: val, recordId: rid,  sObjectName: obj})
+    saveRecord(lbl, fld, val, rid, obj, logcls) {
+        updateField({ fieldName: fld, value: val, recordId: rid,  sObjectName: obj, logClass: logcls, detail: 'Changed from ' + window.location.pathname})
             .then((result) => {
                 if (result == 'Success') {
                     const evt = new ShowToastEvent({title: 'Success',
                                                     message: 'Successfully Updated ' + lbl,
                                                     variant: 'success'});
                     this.dispatchEvent(evt);
+
                     this.error = undefined;
                     this.changeField = undefined;
                     this.changeLabel = undefined;

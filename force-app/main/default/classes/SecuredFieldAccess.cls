@@ -71,7 +71,7 @@ public with sharing class SecuredFieldAccess {
     }
 
     @AuraEnabled
-    public static String updateField(String fieldName, String value, String recordId, String sObjectName) {
+    public static String updateField(String fieldName, String value, String recordId, String sObjectName, String logClass, String detail) {
         sObject sObj = Schema.getGlobalDescribe().get(sObjectName).newSObject();
         Schema.SObjectType sot = sObj.getSObjectType();
         Map<String, Schema.SObjectField> fieldMap = sot.getDescribe().fields.getMap();
@@ -95,7 +95,9 @@ public with sharing class SecuredFieldAccess {
         } catch (Exception e) {
             return 'Update Failed: ' + e.getMessage();
         }
-        
+
+        SecuredFieldAccess.callChangeLogger(logClass, sObjectName, fieldName, recordId, detail);
+
         return 'Success';
     }
 
@@ -112,6 +114,27 @@ public with sharing class SecuredFieldAccess {
 
         Callable logger = (Callable) Type.forName(className).newInstance();
         String status = (String) logger.call((methodName != null ? methodName : 'logView'), 
+                                             new Map<String, Object> { 'objectName' => objectName, 
+                                                                       'fieldName' => fieldName, 
+                                                                       'recordId' => recordId,
+                                                                       'detail' => detail });
+
+        return status;
+    }
+ 
+    @AuraEnabled
+    public static String callChangeLogger(String classMethod, String objectName, String fieldName, String recordId, String detail) {
+
+        String className = classMethod;
+        String methodName;
+
+        if (classMethod != null && classMethod != '' & classMethod.indexOf('.') > 1) {
+            className = classMethod.split('\\.')[0];
+            methodName = classMethod.split('\\.')[1];
+        }
+
+        Callable logger = (Callable) Type.forName(className).newInstance();
+        String status = (String) logger.call((methodName != null ? methodName : 'logChange'), 
                                              new Map<String, Object> { 'objectName' => objectName, 
                                                                        'fieldName' => fieldName, 
                                                                        'recordId' => recordId,

@@ -1,59 +1,64 @@
 <!-- sldsValidatorIgnore -->
 <template>
     <lightning-card title={strTitle} icon-name="utility:lock">
-        <template for:each={fieldData} for:item="field">
-            <div class="c-container" key={field.fieldName}>
-                <lightning-layout horizontal-align="spread" vertical-align="end">
-                    <lightning-layout-item padding="around-small" flexibility="grow">
-                        <template if:false={field.editMode}>
-                            <div class="slds-form-element slds-form-element_readonly" >
-                                <div class="slds-form-element__control">
+        <template if:false={sectionReveal}>
+            <lightning-button-icon slot="actions" class="slds-m-left_xx-small" icon-name="utility:down" variant="bare" alternative-text="Reveal" onclick={handleSectionRevealClick}></lightning-button-icon>
+        </template>
+        <template if:true={sectionReveal}>
+            <lightning-button-icon slot="actions" class="slds-m-left_xx-small" icon-name="utility:up" variant="bare" alternative-text="Hide" onclick={handleSectionRevealClick}></lightning-button-icon>
+            <template for:each={fieldData} for:item="field">
+                <div class="c-container" key={field.fieldName}>
+                    <lightning-layout horizontal-align="spread" vertical-align="end">
+                        <lightning-layout-item padding="around-small" flexibility="grow">
+                            <template if:false={field.editMode}>
+                                <div class="slds-form-element slds-form-element_readonly" >
+                                    <div class="slds-form-element__control">
+                                        <template if:true={field.masked}>
+                                            <lightning-input type="text" label={field.label} value={field.maskedValue} readonly></lightning-input>
+                                        </template>
+                                        <template if:false={field.masked}>
+                                            <lightning-input type="text" label={field.label} value={field.value} readonly></lightning-input>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:true={field.editMode}>
+                                <lightning-input type="text" label={field.label} value={field.value} onchange={handleInputChange}></lightning-input>
+                            </template>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item padding="around-small" >
+                            <template if:true={field.hasPerm2View}>
+                                <template if:false={field.editMode}>
                                     <template if:true={field.masked}>
-                                        <lightning-input type="text" label={field.label} value={field.maskedValue} readonly></lightning-input>
+                                        <lightning-button-icon class="slds-m-left_xx-small" icon-name="utility:preview" variant="bare" alternative-text="Reveal" title={field.fieldName} onclick={handleRevealClick}></lightning-button-icon>
                                     </template>
                                     <template if:false={field.masked}>
-                                        <lightning-input type="text" label={field.label} value={field.value} readonly></lightning-input>
+                                        <lightning-button-icon class="slds-m-left_xx-small" icon-name="utility:hide" variant="bare" alternative-text="Reveal" title={field.fieldName} onclick={handleMaskClick}></lightning-button-icon>
                                     </template>
-                                </div>
-                            </div>
-                        </template>
-
-                        <template if:true={field.editMode}>
-                            <lightning-input type="text" label={field.label} value={field.value} onchange={handleInputChange}></lightning-input>
-                        </template>
-                    </lightning-layout-item>
-
-                    <lightning-layout-item padding="around-small" >
-                        <template if:true={field.hasPerm2View}>
-                            <template if:false={field.editMode}>
-                                <template if:true={field.masked}>
-                                    <lightning-button-icon class="slds-m-left_xx-small" icon-name="utility:preview" variant="bare" alternative-text="Reveal" title={field.fieldName} onclick={handleRevealClick}></lightning-button-icon>
-                                </template>
-                                <template if:false={field.masked}>
-                                    <lightning-button-icon class="slds-m-left_xx-small" icon-name="utility:hide" variant="bare" alternative-text="Reveal" title={field.fieldName} onclick={handleMaskClick}></lightning-button-icon>
                                 </template>
                             </template>
-                        </template>
 
-                        <template if:true={field.hasPerm2Edit}>
-                            <template if:false={field.editMode}>
-                                <lightning-button-icon class="slds-m-left_xx-small" icon-name="utility:edit" variant="bare" alternative-text="Edit" title={field.fieldName} onclick={handleEditClick}></lightning-button-icon>
-                            </template>
-                            <template if:true={field.editMode}>
-                                <template if:true={showSaveButton}>
-                                    <lightning-button-icon class="slds-m-left_xx-small" icon-name="utility:check" variant="bare" alternative-text="Edit" title={field.fieldName} onclick={handleSaveClick}></lightning-button-icon>
+                            <template if:true={field.hasPerm2Edit}>
+                                <template if:false={field.editMode}>
+                                    <lightning-button-icon class="slds-m-left_xx-small" icon-name="utility:edit" variant="bare" alternative-text="Edit" title={field.fieldName} onclick={handleEditClick}></lightning-button-icon>
                                 </template>
-                                <lightning-button-icon class="slds-m-left_xx-small" icon-name="utility:close" variant="bare" alternative-text="Edit" title={field.fieldName} onclick={handleCancelClick}></lightning-button-icon>
+                                <template if:true={field.editMode}>
+                                    <template if:true={showSaveButton}>
+                                        <lightning-button-icon class="slds-m-left_xx-small" icon-name="utility:check" variant="bare" alternative-text="Edit" title={field.fieldName} onclick={handleSaveClick}></lightning-button-icon>
+                                    </template>
+                                    <lightning-button-icon class="slds-m-left_xx-small" icon-name="utility:close" variant="bare" alternative-text="Edit" title={field.fieldName} onclick={handleCancelClick}></lightning-button-icon>
+                                </template>
                             </template>
-                        </template>
-                    </lightning-layout-item>
-                </lightning-layout>
-            </div>
-        </template>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+            </template>
 
-        <template if:true={error}>
-            {errorText}
+            <template if:true={error}>
+                {errorText}
+            </template>
         </template>
     </lightning-card> 
-
 </template>
