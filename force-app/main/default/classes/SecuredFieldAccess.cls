@@ -93,7 +93,7 @@ public with sharing class SecuredFieldAccess {
         
         return 'Success';
     }
-
+ 
     public static Boolean hasCustomPermission(String name) {
         Set<Id> permissionSetIds = new Set<Id>();
         for (SetupEntityAccess access : [SELECT ParentId 

@@ -23,7 +23,7 @@ public class DataMasker implements Callable {
         } 
         return (convertOutput == convertInput ? 'Bad data format' : convertOutput);
     }
-
+ 
     public static String maskDate(Datetime convertInput, String dateFormat) {
         if (convertInput == null) {
             return null;

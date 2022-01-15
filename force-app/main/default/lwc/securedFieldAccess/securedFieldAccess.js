@@ -146,7 +146,7 @@ export default class SecuredFieldAccess extends LightningElement {
                 this.dispatchEvent(evt);
             });
     }
-
+ 
     imperativeGetFields() {
         console.log('Sriram was here');
         getSecuredFields({ fieldList: this.strFieldMaskJSON, recordId: this.recordId, sObjectName: this.objectApiName })
