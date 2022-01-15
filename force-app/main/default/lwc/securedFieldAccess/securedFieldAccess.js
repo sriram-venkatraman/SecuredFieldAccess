@@ -92,6 +92,15 @@ export default class SecuredFieldAccess extends LightningElement {
 
     handleSectionRevealClick(event) {
         this.sectionReveal = !(this.sectionReveal);
+        if (!this.sectionReveal) {
+            for (var i = 0; i < this.fieldData.length; i++) {
+                this.fieldData[i].editMode = false;
+            }
+            this.changeField = undefined;
+            this.changeLabel = undefined;
+            this.changeValue = undefined;
+            this.error = undefined;
+        }
     }
 
     handleMaskClick(event) {
