@@ -98,6 +98,26 @@ public with sharing class SecuredFieldAccess {
         
         return 'Success';
     }
+
+    @AuraEnabled
+    public static String callViewLogger(String classMethod, String objectName, String fieldName, String recordId) {
+
+        String className = classMethod;
+        String methodName;
+
+        if (classMethod != null && classMethod != '' & classMethod.indexOf('.') > 1) {
+            className = classMethod.split('\\.')[0];
+            methodName = classMethod.split('\\.')[1];
+        }
+
+        Callable logger = (Callable) Type.forName(className).newInstance();
+        String status = (String) logger.call((methodName != null ? methodName : 'logView'), 
+                                             new Map<String, Object> { 'objectName' => objectName, 
+                                                                       'fieldName' => fieldName, 
+                                                                       'recordId' => recordId });
+
+        return status;
+    }
  
     public static Boolean hasCustomPermission(String name) {
         Set<Id> permissionSetIds = new Set<Id>();

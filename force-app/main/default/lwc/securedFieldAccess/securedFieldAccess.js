@@ -2,6 +2,7 @@ import { LightningElement, api, wire, track} from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getSecuredFields from '@salesforce/apex/SecuredFieldAccess.getFields';
 import updateField from '@salesforce/apex/SecuredFieldAccess.updateField';
+import viewLogger from '@salesforce/apex/SecuredFieldAccess.callViewLogger';
 
 export default class SecuredFieldAccess extends LightningElement {
     @api objectApiName;
@@ -50,8 +51,38 @@ export default class SecuredFieldAccess extends LightningElement {
         for (var i = 0; i < this.fieldData.length; i++) {
             if (this.fieldData[i].fieldName == event.target.title) {
                 this.fieldData[i].masked = false;
+
+                if (this.fieldData[i].value != undefined && 
+                    this.fieldData[i].value != null && 
+                    this.strLoggerClass != null && 
+                    this.strLoggerClass != undefined) {
+                    this.logTheView(this.strLoggerClass,
+                                    this.objectApiName, 
+                                    this.fieldData[i].fieldName,  
+                                    this.recordId);
+                }
             }
         }
+    }
+
+    logTheView(cm, obj, fld, rid) {
+        viewLogger({ classMethod: cm, objectName: obj, fieldName: fld,  recordId: rid})
+            .then((result) => {
+                if (result != 'Success') {
+                    const evt = new ShowToastEvent({title: 'Logger Error',
+                                                    message: 'Logger Error: ' + result,
+                                                    variant: 'error'});
+                    this.dispatchEvent(evt);
+                    this.error = result;
+                }
+            })
+            .catch((error) => {this.error = error;
+                this.result = undefined;
+                const evt = new ShowToastEvent({title: 'Error',
+                                                message: error.message,
+                                                variant: 'error'});
+                this.dispatchEvent(evt);
+            });        
     }
 
     handleMaskClick(event) {
@@ -149,7 +180,6 @@ export default class SecuredFieldAccess extends LightningElement {
     }
  
     imperativeGetFields() {
-        console.log('Sriram was here');
         getSecuredFields({ fieldList: this.strFieldMaskJSON, recordId: this.recordId, sObjectName: this.objectApiName })
             .then((data) => {
                 if (data) {

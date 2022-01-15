@@ -1,3 +1,3 @@
 public interface SecuredFieldAccessLoggerInterface {
-    String logView(String fieldName, String userId, String recordId); 
+    String logView(String objectName, String fieldName, String recordId); 
 }

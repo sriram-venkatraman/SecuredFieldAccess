@@ -1,10 +1,34 @@
-public with sharing class SecuredFieldAccessLogger {
-    public SecuredFieldAccessLogger() {
+public with sharing class SecuredFieldAccessLogger implements Callable {
+    public static String logView(String objectName, String fieldName, String recordId) {
+        try {
+            Secured_Field_Access_Log__c sfal = new Secured_Field_Access_Log__c();
+            sfal.Object_Name__c = objectName;
+            sfal.Field_Name__c = fieldName;
+            sfal.User__c = UserInfo.getUserId();
+            sfal.Record_Id__c = recordId;
+            sfal.Mode__c = 'View';
+            insert sfal;
+        } catch (Exception e) {
+            return 'Error! ' + e.getMessage();
+        }
 
+        return 'Success';
     }
 
-    public String logView(String fieldName, String userId, String recordId) {
-        return 'xx';
+    // Dispatch actual methods
+    public Object call(String action, Map<String, Object> args) {
+        switch on action {
+            when 'logView' {
+                return SecuredFieldAccessLogger.logView((String) args.get('objectName'),
+                                                        (String) args.get('fieldName'),
+                                                        (String) args.get('recordId'));
+            }
+            when else {
+                throw new ExtensionMalformedCallException('Method not implemented');
+            }
+        }
     }
+
+    public class ExtensionMalformedCallException extends Exception {}
 
 }
