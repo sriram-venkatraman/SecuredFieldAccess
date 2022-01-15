@@ -20,7 +20,7 @@ export default class SecuredFieldAccess extends LightningElement {
     wiredFields({ error, data }) {
         if (data) {
             this.fieldData = JSON.parse(data);
-            // console.log('Sriram: ' + JSON.stringify(this.fieldData));
+
             this.error = undefined;
 
             for (var i = 0; i < this.fieldData.length; i++) {
@@ -30,7 +30,6 @@ export default class SecuredFieldAccess extends LightningElement {
         } else if (error) {
             this.error = error;
             this.fieldData = 'undefined';
-            console.log('Totally Messed Up: ' + JSON.stringify(this.error));
         }
     }
 
@@ -149,12 +148,11 @@ export default class SecuredFieldAccess extends LightningElement {
     }
 
     imperativeGetFields() {
-        console.log('I came here');
+        console.log('Sriram was here');
         getSecuredFields({ fieldList: this.strFieldMaskJSON, recordId: this.recordId, sObjectName: this.objectApiName })
             .then((data) => {
                 if (data) {
                     this.fieldData = JSON.parse(data);
-                    console.log('Sriram: ' + JSON.stringify(this.fieldData));
                     this.error = undefined;
         
                     for (var i = 0; i < this.fieldData.length; i++) {
@@ -164,7 +162,6 @@ export default class SecuredFieldAccess extends LightningElement {
                 } else if (error) {
                     this.error = error;
                     this.fieldData = 'undefined';
-                    console.log('Totally Messed Up: ' + JSON.stringify(this.error));
                 }
             })
             .catch((error) => {this.error = error;

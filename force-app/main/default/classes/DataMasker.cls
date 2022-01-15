@@ -30,7 +30,7 @@ public class DataMasker implements Callable {
         }
 
         String convertOutput = '';
-        System.debug('Sriram Date: ' + convertInput);
+
         try {
             if (dateFormat == '**/mm/yyyy' || dateFormat == null) {
                 convertOutput = convertInput.formatGmt('MM/yyyy');
