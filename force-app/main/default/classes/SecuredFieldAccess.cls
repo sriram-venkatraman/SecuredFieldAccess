@@ -37,26 +37,31 @@ public with sharing class SecuredFieldAccess {
                 OutputFields ofld = new OutputFields();
                 ofld.fieldName = field;
                 ofld.label = fieldMap.get(field).getDescribe().getLabel();
-                if (fieldMap.get(field).getDescribe().getType() == Schema.DisplayType.DATE || 
-                    fieldMap.get(field).getDescribe().getType() == Schema.DisplayType.DATETIME) {
-                    ofld.value = ((Datetime) record.get(field)).formatGmt('MM/dd/yyyy');
-                } else {
-                    ofld.value = (String) record.get(field);
-                }
-                
                 ofld.hasPerm2View = fld.hasPerm2View;
                 ofld.hasPerm2Edit = fld.hasPerm2Edit;
 
-                if (className != null && methodName != null) {
-                    Callable masker = (Callable) Type.forName(className).newInstance();
-                    if (fieldMap.get(field).getDescribe().getType() == Schema.DisplayType.DATE ||
+                if (record.get(field) != null) {
+                    if (fieldMap.get(field).getDescribe().getType() == Schema.DisplayType.DATE || 
                         fieldMap.get(field).getDescribe().getType() == Schema.DisplayType.DATETIME) {
-                        ofld.maskedValue = (String) masker.call(methodName, new Map<String, Object> { 'dateValue' => (Datetime) record.get(field), 'stringValue' => '**/mm/yyyy' });
-                    } else if (fieldMap.get(field).getDescribe().getType() == Schema.DisplayType.STRING) {
-                        ofld.maskedValue = (String) masker.call(methodName, new Map<String, Object> { 'stringValue' => (String) record.get(field) });
+                        ofld.value = ((Datetime) record.get(field)).formatGmt('MM/dd/yyyy');
                     } else {
-                    ofld.maskedValue = ofld.value;
+                        ofld.value = (String) record.get(field);
                     }
+                    
+                    if (className != null && methodName != null) {
+                        Callable masker = (Callable) Type.forName(className).newInstance();
+                        if (fieldMap.get(field).getDescribe().getType() == Schema.DisplayType.DATE ||
+                            fieldMap.get(field).getDescribe().getType() == Schema.DisplayType.DATETIME) {
+                            ofld.maskedValue = (String) masker.call(methodName, new Map<String, Object> { 'dateValue' => (Datetime) record.get(field), 'stringValue' => '**/mm/yyyy' });
+                        } else if (fieldMap.get(field).getDescribe().getType() == Schema.DisplayType.STRING) {
+                            ofld.maskedValue = (String) masker.call(methodName, new Map<String, Object> { 'stringValue' => (String) record.get(field) });
+                        } else {
+                        ofld.maskedValue = ofld.value;
+                        }
+                    }
+                } else {
+                    ofld.value = null;
+                    ofld.maskedValue = null;
                 }
                 oflds.add(ofld);
             }
@@ -102,8 +107,7 @@ public with sharing class SecuredFieldAccess {
                                             SELECT Id 
                                             FROM CustomPermission 
                                             WHERE MasterLabel = :name
-                                        )
-                                    ]) {
+                                        )]) {
             permissionSetIds.add(access.ParentId);
         }
 

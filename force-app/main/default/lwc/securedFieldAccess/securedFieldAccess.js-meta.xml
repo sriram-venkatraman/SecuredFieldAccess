@@ -10,6 +10,7 @@
     <targetConfigs>
         <targetConfig targets="lightning__RecordPage">
             <property name="strFieldMaskJSON" type="String" default="{}" label="Enter field and masker in regex as json [{&quot;field&quot;: &quot;ssn__c&quot;, &quot;masker&quot;: &quot;apexclass.method&quot;}, {..}]"/>
+            <property name="strLoggerClass" type="String" default="" label="Enter apex class name for logging views."/>
             <property name="strTitle" type="String" default="" label="Enter Title for the Card."/>
         </targetConfig>
       </targetConfigs>

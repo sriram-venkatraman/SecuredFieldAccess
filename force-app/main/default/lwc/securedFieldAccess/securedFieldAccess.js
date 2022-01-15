@@ -7,6 +7,7 @@ export default class SecuredFieldAccess extends LightningElement {
     @api objectApiName;
     @api recordId;
     @api strFieldMaskJSON;
+    @api strLoggerClass;
     @api strTitle;
     @api strOutput;
     @track fieldData;
@@ -83,6 +84,14 @@ export default class SecuredFieldAccess extends LightningElement {
         return false;
     }
 
+    handleInputChange(event) {
+        for (var i = 0; i < this.fieldData.length; i++) {
+            if (this.fieldData[i].label == event.target.label) {
+                this.changeValue = event.target.value;
+            }
+        }
+    }
+
     handleSaveClick(event) {
         for (var i = 0; i < this.fieldData.length; i++) {
             if (this.fieldData[i].fieldName == event.target.title) {
@@ -97,14 +106,6 @@ export default class SecuredFieldAccess extends LightningElement {
         }
     }
  
-    handleInputChange(event) {
-        for (var i = 0; i < this.fieldData.length; i++) {
-            if (this.fieldData[i].label == event.target.label) {
-                this.changeValue = event.target.value;
-            }
-        }
-    }
-
     handleCancelClick(event) {
         for (var i = 0; i < this.fieldData.length; i++) {
             if (this.fieldData[i].fieldName == event.target.title) {
