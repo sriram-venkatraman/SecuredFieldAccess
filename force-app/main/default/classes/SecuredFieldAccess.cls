@@ -1,5 +1,6 @@
 public with sharing class SecuredFieldAccess {
 
+    // Comment for demo
     @AuraEnabled(cacheable=true)
     public static String getFields(String fieldList, String recordId, String sObjectName) {
         List<FieldMask> fml = (List<FieldMask>) JSON.deserialize(fieldList, List<FieldMask>.class);
