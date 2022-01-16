@@ -3,6 +3,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getSecuredFields from '@salesforce/apex/SecuredFieldAccess.getFields';
 import updateField from '@salesforce/apex/SecuredFieldAccess.updateField';
 import viewLogger from '@salesforce/apex/SecuredFieldAccess.callViewLogger';
+import { refreshApex } from '@salesforce/apex';
 
 export default class SecuredFieldAccess extends LightningElement {
     @api objectApiName;
@@ -12,7 +13,8 @@ export default class SecuredFieldAccess extends LightningElement {
     @api strChangeLoggerClass;
     @api strTitle;
     @api strOutput;
-    @track sectionReveal;
+    @api sectionReveal;
+
     @track fieldData;
     changeField;
     changeValue;
@@ -22,20 +24,19 @@ export default class SecuredFieldAccess extends LightningElement {
 
     sectionReveal = false;
 
-    @wire(getSecuredFields, { fieldList: '$strFieldMaskJSON', recordId: '$recordId', sObjectName: '$objectApiName' })
-    wiredFields({ error, data }) {
-        if (data) {
-            this.fieldData = JSON.parse(data);
+    refreshedData;
 
+    @wire(getSecuredFields, { fieldList: '$strFieldMaskJSON', recordId: '$recordId', sObjectName: '$objectApiName' })
+    wiredFields( result ) {
+        this.refreshedData = result;
+        if (result.data) {
+            this.fieldData = JSON.parse(result.data);
             this.error = undefined;
 
             for (var i = 0; i < this.fieldData.length; i++) {
                 this.fieldData[i].masked = true;
                 this.fieldData[i].editMode = false;
              }
-        } else if (error) {
-            this.error = error;
-            this.fieldData = 'undefined';
         }
     }
 
@@ -192,7 +193,8 @@ export default class SecuredFieldAccess extends LightningElement {
                     this.changeField = undefined;
                     this.changeLabel = undefined;
                     this.changeValue = undefined;
-                    this.imperativeGetFields();
+
+                    refreshApex(this.refreshedData);
                 } else {
                     const evt = new ShowToastEvent({title: 'Error',
                                                     message: result,
@@ -209,32 +211,7 @@ export default class SecuredFieldAccess extends LightningElement {
                 this.dispatchEvent(evt);
             });
     }
- 
-    imperativeGetFields() {
-        getSecuredFields({ fieldList: this.strFieldMaskJSON, recordId: this.recordId, sObjectName: this.objectApiName })
-            .then((data) => {
-                if (data) {
-                    this.fieldData = JSON.parse(data);
-                    this.error = undefined;
-        
-                    for (var i = 0; i < this.fieldData.length; i++) {
-                        this.fieldData[i].masked = true;
-                        this.fieldData[i].editMode = false;
-                     }
-                } else if (error) {
-                    this.error = error;
-                    this.fieldData = 'undefined';
-                }
-            })
-            .catch((error) => {this.error = error;
-                               this.result = undefined;
-                               const evt = new ShowToastEvent({title: 'Error',
-                                                               message: 'Error retrieving Secured fields',
-                                                               variant: 'error'});
-                this.dispatchEvent(evt);
-            });
-    }
-}
+
 /* 
 [
    {

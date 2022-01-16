@@ -13,6 +13,7 @@
             <property name="strViewLoggerClass" type="String" default="" label="Enter apex class name for logging views."/>
             <property name="strChangeLoggerClass" type="String" default="" label="Enter apex class name for logging changes."/>
             <property name="strTitle" type="String" default="" label="Enter Title for the Card."/>
+            <property name="sectionReveal" type="Boolean" default="false" label="Expand By Default"/>
         </targetConfig>
       </targetConfigs>
 </LightningComponentBundle>
