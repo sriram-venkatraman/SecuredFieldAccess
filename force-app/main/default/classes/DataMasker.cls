@@ -6,6 +6,10 @@ public class DataMasker implements Callable {
             return null;
         }
 
+        if (convertInput.length() != 9) {
+            return 'Bad data format';
+        }
+
         String convertOutput = '';
         String validate = '(?:\\d{9})';
 

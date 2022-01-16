@@ -42,7 +42,9 @@
 
                             <template if:true={field.hasPerm2Edit}>
                                 <template if:false={field.editMode}>
-                                    <lightning-button-icon class="slds-m-left_xx-small" icon-name="utility:edit" variant="bare" alternative-text="Edit" title={field.fieldName} onclick={handleEditClick}></lightning-button-icon>
+                                    <template if:false={inEditMode}>
+                                        <lightning-button-icon class="slds-m-left_xx-small" icon-name="utility:edit" variant="bare" alternative-text="Edit" title={field.fieldName} onclick={handleEditClick}></lightning-button-icon>
+                                    </template>
                                 </template>
                                 <template if:true={field.editMode}>
                                     <template if:true={showSaveButton}>

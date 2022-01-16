@@ -145,6 +145,10 @@ export default class SecuredFieldAccess extends LightningElement {
         return false;
     }
 
+    get inEditMode() {
+        return (this.changeField != undefined ? true : false);
+    }
+
     handleInputChange(event) {
         for (var i = 0; i < this.fieldData.length; i++) {
             if (this.fieldData[i].label == event.target.label) {
@@ -211,7 +215,7 @@ export default class SecuredFieldAccess extends LightningElement {
                 this.dispatchEvent(evt);
             });
     }
-
+}
 /* 
 [
    {
