@@ -27,9 +27,9 @@ This open source has been created as a reusable solution for the Salesforce comm
 ### Sample Usage including logging
 ![Sample Usage including logging](/assets/images/usage.gif)
 ### Sample Logger Implementation
-![Sample Logger Implementation](/force-app/main/default/classes/SecuredFieldAccessLogger.cls)
+[Sample Logger Implementation](/force-app/main/default/classes/SecuredFieldAccessLogger.cls)
 ### Sample Logger Object
-![Sample Logger Object](/force-app/main/default/objects/Secured_Field_Access_Log__c)
+[Sample Logger Object](/force-app/main/default/objects/Secured_Field_Access_Log__c)
 
 # !! Important !!
 * Still working on adding comments to my code
