@@ -1,3 +1,5 @@
+# Secured Field Access
+
 __Deploy to Dev Org/Prod:__ [![Deploy to Salesforce](https://andrewfawcett.files.wordpress.com/2014/09/deploy.png)](https://githubsfdeploy.herokuapp.com/app/githubdeploy/sriram-venkatraman/SecuredFieldAccess)
 
 __Deploy to Sandbox:__ [![Deploy to Salesforce](https://andrewfawcett.files.wordpress.com/2014/09/deploy.png)](https://githubsfdeploy-sandbox.herokuapp.com/app/githubdeploy/sriram-venkatraman/SecuredFieldAccess)
@@ -18,8 +20,6 @@ _Note: Still tidying up with test classes and documentation. Functionality seems
   - [Description of Files and Directories](#description-of-files-and-directories)
   - [Issues](#issues)
   
-# Secured Field Access
-
 ## Challenge:
 Salesforce provides [Platform Encryption](https://help.salesforce.com/s/articleView?id=sf.security_pe_overview.htm&type=5) to encrypt sensitive fields at rest. Platform Encryption doesn's provide a standard mechanism to mask fields that are considered sensitive. Current available options for UX are as follows -
 * Switch to classic encryption & use the masking feature. Be aware of [differences between classic and platform encryption](https://developer.salesforce.com/docs/atlas.en-us.securityImplGuide.meta/securityImplGuide/security_pe_vs_classic_encryption.htm) and [considerations](https://developer.salesforce.com/docs/atlas.en-us.210.0.securityImplGuide.meta/securityImplGuide/security_pe_considerations_general.htm)
