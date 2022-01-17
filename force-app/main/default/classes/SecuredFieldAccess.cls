@@ -97,7 +97,9 @@ public with sharing class SecuredFieldAccess {
             return 'Update Failed: ' + e.getMessage();
         }
 
-        SecuredFieldAccess.callChangeLogger(logClass, sObjectName, fieldName, recordId, detail);
+        if (logClass != null & logClass != '') {
+            SecuredFieldAccess.callChangeLogger(logClass, sObjectName, fieldName, recordId, detail);
+        }
 
         return 'Success';
     }

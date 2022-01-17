@@ -4,17 +4,37 @@ __Deploy to Sandbox:__ [![Deploy to Salesforce](https://andrewfawcett.files.word
 
 # Secured Field Access
 
-## How Do You Plan to Deploy Your Changes?
+_Note: Still tidying up with test classes and documentation. Functionality seems to work reasonably well although I haven't done extensive test_
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+## Challenge:
+Salesforce provides [Platform Encryption](https://help.salesforce.com/s/articleView?id=sf.security_pe_overview.htm&type=5) to encrypt sensitive fields at rest. Platform Encryption doesn's provide a standard mechanism to mask fields that are considered sensitive. Current available options for UX are as follows -
+* Switch to classic encryption & use the masking feature. Be aware of [differences between classic and platform encryption](https://developer.salesforce.com/docs/atlas.en-us.securityImplGuide.meta/securityImplGuide/security_pe_vs_classic_encryption.htm) and [considerations](https://developer.salesforce.com/docs/atlas.en-us.210.0.securityImplGuide.meta/securityImplGuide/security_pe_considerations_general.htm)
+* Provide access to unmasked sensitive fields through field level security or completely take away the access
+* Create a custom solution
 
-## Configure Your Salesforce DX Project
+Typically information security compliance requires access to sensitive data to be provided only when required, to those who are authorized and log view/update activities.
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
+## Solution:
+This open source has been created as a reusable solution for the Salesforce community to provide quick starting point with all foundational capabilities such as -
+* Configurable LWC record page component.
+* Ability to specify dynamic fields specifications including masking through apex & permission to view & update. No standard Field Level Security access needs to be provided to these fields. Yet use Customm Permission to reveal and update access to specific fields.
+* Optionally, provide custom apex Class.Method to log views & updates.
 
-## Read All About It
+## Sample Configuration
+![Sample Component Configuration](/assets/images/componentconfig.png)
+![Sample JSON for Dynamic Field Specification](/assets/images/jsonconfig.png)
+![Sample Usage including logging](/assets/images/usage.gif)
+![Sample Logger Implementation](/force-app/main/default/classes/SecuredFieldAccessLogger.cls)
+![Sample Logger Object](/force-app/main/default/objects/Secured_Field_Access_Log__c)
 
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+# !! Important !!
+* Still working on adding comments to my code
+* Still working on creating test classes to the apex classes
+
+## Dev, Build and Test
+
+## Resources
+
+## Description of Files and Directories
+
+## Issues
