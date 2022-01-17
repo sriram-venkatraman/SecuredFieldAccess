@@ -16,7 +16,9 @@ _Note: Still tidying up with test classes and documentation. Functionality seems
   - [Dev, Build and Test](#dev-build-and-test)
   - [Resources](#resources)
   - [Description of Files and Directories](#description-of-files-and-directories)
-  - [Issues](#issues)# Secured Field Access
+  - [Issues](#issues)
+  
+# Secured Field Access
 
 ## Challenge:
 Salesforce provides [Platform Encryption](https://help.salesforce.com/s/articleView?id=sf.security_pe_overview.htm&type=5) to encrypt sensitive fields at rest. Platform Encryption doesn's provide a standard mechanism to mask fields that are considered sensitive. Current available options for UX are as follows -
