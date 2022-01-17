@@ -4,7 +4,7 @@ __Deploy to Dev Org/Prod:__ [![Deploy to Salesforce](https://andrewfawcett.files
 
 __Deploy to Sandbox:__ [![Deploy to Salesforce](https://andrewfawcett.files.wordpress.com/2014/09/deploy.png)](https://githubsfdeploy-sandbox.herokuapp.com/app/githubdeploy/sriram-venkatraman/SecuredFieldAccess)
 
-_Note: Still tidying up with test classes and documentation. Functionality seems to work reasonably well although I haven't done extensive test_
+_Note: Still tidying up with test classes and documentation. Functionality seems to work reasonably well although I haven't done extensive testing_
 
 - [Secured Field Access](#secured-field-access)
   - [Challenge:](#challenge)
