@@ -20,11 +20,15 @@ This open source has been created as a reusable solution for the Salesforce comm
 * Ability to specify dynamic fields specifications including masking through apex & permission to view & update. No standard Field Level Security access needs to be provided to these fields. Yet use Customm Permission to reveal and update access to specific fields.
 * Optionally, provide custom apex Class.Method to log views & updates.
 
-## Sample Configuration
+### Sample Component Configuration
 ![Sample Component Configuration](/assets/images/componentconfig.png)
+### Sample JSON for Dynamic Field Specification
 ![Sample JSON for Dynamic Field Specification](/assets/images/jsonconfig.png)
+### Sample Usage including logging
 ![Sample Usage including logging](/assets/images/usage.gif)
+### Sample Logger Implementation
 ![Sample Logger Implementation](/force-app/main/default/classes/SecuredFieldAccessLogger.cls)
+### Sample Logger Object
 ![Sample Logger Object](/force-app/main/default/objects/Secured_Field_Access_Log__c)
 
 # !! Important !!
